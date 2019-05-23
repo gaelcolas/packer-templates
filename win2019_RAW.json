@@ -1,7 +1,7 @@
 {
   "builders": [
     {
-      "boot_wait": "2m",
+      "boot_wait": "4m",
       "communicator": "winrm",
       "disk_size": "{{user `disk_size`}}",
       "remote_type": "esx5",
@@ -15,13 +15,10 @@
       "skip_compaction": true,
       "floppy_files": [
         "{{user `autounattend`}}",
-        "./scripts/disable-screensaver.ps1",
         "./scripts/disable-winrm.ps1",
         "./scripts/enable-winrm.ps1",
-        "./scripts/microsoft-updates.bat",
         "./scripts/unattend.xml",
         "./scripts/sysprep.bat",
-        "./scripts/win-updates.ps1",
         "./scripts/fixnetwork.ps1"
       ],
       "guest_os_type": "windows9srv-64",
@@ -32,19 +29,18 @@
       "shutdown_command": "a:/sysprep.bat",
       "type": "vmware-iso",
       "version": 12,
-      "vm_name": "win2019a",
+      "vm_name": "{{user `vmname`}}",
       "vmx_data": {
         "RemoteDisplay.vnc.enabled": "false",
-        "RemoteDisplay.vnc.port": "5900",
+        "ethernet0.networkName": "VM Network",
+        "ethernet0.startConnected": true,
         "memsize": "2048",
         "numvcpus": "2",
-        "scsi0.virtualDev": "lsisas1068",
-        "ethernet0.networkName": "VM Network",
-        "ethernet0.startConnected": true
+        "scsi0.virtualDev": "lsisas1068"
       },
       "vmx_remove_ethernet_interfaces": false,
-      "vnc_port_max": 5980,
       "vnc_port_min": 5900,
+      "vnc_port_max": 5980,
       "vnc_disable_password": true,
       "winrm_password": "vagrant",
       "winrm_timeout": "{{user `winrm_timeout`}}",
@@ -55,46 +51,21 @@
   ],
   "provisioners": [
     {
-      "execute_command": "{{ .Vars }} cmd /c \"{{ .Path }}\"",
-      "scripts": [
-        "./scripts/vm-guest-tools.bat",
-        "./scripts/enable-rdp.bat"
-      ],
-      "type": "windows-shell"
-    },
-    {
-      "scripts": [
-        "./scripts/debloat-windows.ps1"
-      ],
-      "type": "powershell"
-    },
-    {
       "restart_timeout": "{{user `restart_timeout`}}",
       "type": "windows-restart"
-    },
-    {
-      "execute_command": "{{ .Vars }} cmd /c \"{{ .Path }}\"",
-      "scripts": [
-        "./scripts/pin-powershell.bat",
-        "./scripts/set-winrm-automatic.bat",
-        "./scripts/uac-enable.bat",
-        "./scripts/compile-dotnet-assemblies.bat",
-        "./scripts/dis-updates.bat"
-      ],
-      "type": "windows-shell"
     }
   ],
   "variables": {
-    "autounattend": "./answer_files/2019/Autounattend.xml",
+    "vmname": "win2019_RAW",
+    "autounattend": "./answer_files/2019/RAW/Autounattend.xml",
     "disk_size": "61440",
     "disk_type_id": "thin",
-    "headless": "false",
-    "hyperv_switchname": "{{env `hyperv_switchname`}}",
+    "headless": "true",
     "iso_checksum": "dbb0ffbab5d114ce7370784c4e24740191fefdb3349917c77a53ff953dd10f72",
     "iso_checksum_type": "sha256",
     "iso_url": "https://software-download.microsoft.com/download/pr/17763.1.180914-1434.rs5_release_SERVER_EVAL_x64FRE_en-us.iso",
     "manually_download_iso_from": "https://www.microsoft.com/en-us/software-download/windowsinsiderpreviewserver",
-    "restart_timeout": "5m",
+    "restart_timeout": "8m",
     "winrm_timeout": "2h",
     "esxi_host": "esxi.lab.local",
     "esxi_datastore": "ssd",
