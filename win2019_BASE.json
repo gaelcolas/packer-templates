@@ -1,36 +1,32 @@
 {
   "builders": [
     {
-      "boot_wait": "4m",
+      "type": "vmware-vmx",
+
+      "boot_wait": "2m",
       "communicator": "winrm",
-      "disk_size": "{{user `disk_size`}}",
       "remote_type": "esx5",
       "remote_host": "{{user `esxi_host`}}",
       "remote_datastore": "{{user `esxi_datastore`}}",
       "remote_username": "{{user `esxi_username`}}",
       "remote_password": "{{user `esxi_password`}}",
-      "disk_type_id":"{{user `disk_type_id`}}",
-      "skip_export": "{{user `skip_export`}}",
+      "skip_export": true,
       "keep_registered": true,
-      "skip_compaction": false,
+      "skip_compaction": true,
       "floppy_files": [
         "{{user `autounattend`}}",
         "./scripts/disable-winrm.ps1",
         "./scripts/enable-winrm.ps1",
         "./scripts/unattend.xml",
         "./scripts/sysprep.bat",
-        "./scripts/fixnetwork.ps1",
-        "./floppy"
+        "./scripts/fixnetwork.ps1"
       ],
-      "guest_os_type": "windows9srv-64",
       "headless": "{{user `headless`}}",
-      "iso_checksum": "{{user `iso_checksum`}}",
-      "iso_checksum_type": "{{user `iso_checksum_type`}}",
-      "iso_url": "{{user `iso_url`}}",
-      "shutdown_command": "a:/sysprep.bat",
-      "type": "vmware-iso",
-      "version": 12,
+      "shutdown_command": "shutdown -s -t 0",
+      "source_path": "/Win2019_RAW/Win2019_RAW.vmtx",
+
       "vm_name": "{{user `vmname`}}",
+      "display_name": "{{user `vmname`}}",
       "vmx_data": {
         "RemoteDisplay.vnc.enabled": "false",
         "ethernet0.networkName": "VM Network",
@@ -48,6 +44,12 @@
       "winrm_username": "vagrant"
     }
   ],
+  "provisioners": [
+    {
+      "restart_timeout": "{{user `restart_timeout`}}",
+      "type": "windows-restart"
+    }
+  ],
   "post-processors": [
     {
       "type": "vsphere-template",
@@ -59,24 +61,10 @@
       "folder": "/packer-templates"
     }
   ],
-  "provisioners": [
-    {
-      "restart_timeout": "{{user `restart_timeout`}}",
-      "type": "windows-restart"
-    }
-  ],
-
   "variables": {
-    "vmname": "win2019_RAW",
+    "vmname": "win2019_BASE",
     "autounattend": "./answer_files/2019/RAW/Autounattend.xml",
-    "disk_size": "61440",
-    "disk_type_id": "thin",
     "headless": "true",
-    "skip_export": "true",
-    "iso_checksum": "dbb0ffbab5d114ce7370784c4e24740191fefdb3349917c77a53ff953dd10f72",
-    "iso_checksum_type": "sha256",
-    "iso_url": "https://software-download.microsoft.com/download/pr/17763.1.180914-1434.rs5_release_SERVER_EVAL_x64FRE_en-us.iso",
-    "manually_download_iso_from": "https://www.microsoft.com/en-us/software-download/windowsinsiderpreviewserver",
     "restart_timeout": "8m",
     "winrm_timeout": "2h",
     "esxi_host": "esxi.lab.local",

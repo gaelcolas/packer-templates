@@ -2,7 +2,7 @@ netsh advfirewall firewall set rule name="Windows Remote Management (HTTP-In)" n
 netsh advfirewall firewall set rule group="Windows Remote Management" new enable=yes
 $winrmService = Get-Service -Name WinRM
 if ($winrmService.Status -eq "Running"){
-    Disable-PSRemoting -Force
+    Disable-PSRemoting -Force -ErrorAction SilentlyContinue
 }
-Stop-Service winrm
+Stop-Service winrm -ErrorAction SilentlyContinue
 Set-Service -Name winrm -StartupType Disabled
