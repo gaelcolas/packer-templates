@@ -1,0 +1,37 @@
+
+driver:
+  name: vcenter
+  vcenter_username: 'administrator@vsphere.local'
+  vcenter_password: P@ssw0rd!
+  vcenter_host:  vcsa.lab.local
+  vcenter_disable_ssl_verify: true
+  datacenter: lab1
+  cluster: cluster
+
+transport:
+  username: vagrant
+  password: vagrant
+
+verifier:
+  name: pester
+
+provisioner:
+  name: dsc
+  dsc_local_configuration_manager_version: wmf5
+  configuration_name:
+    - Chocolatey_config
+  configuration_script_folder: .
+  configuration_script: Chocolatey_config.ps1
+  configuration_data:
+    AllNodes:
+      - nodename: localhost
+  modules_from_gallery:
+    - chocolatey
+
+platforms:
+  - name: win2019_RAW
+    driver:
+      template: packer-templates/win2019_RAW
+
+suites:
+  - name: config

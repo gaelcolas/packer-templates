@@ -14,6 +14,7 @@
       "keep_registered": true,
       "skip_compaction": true,
       "floppy_files": [
+        "./DSC_Configuration"
         "{{user `autounattend`}}",
         "./scripts/disable-winrm.ps1",
         "./scripts/enable-winrm.ps1",
@@ -23,7 +24,7 @@
       ],
       "headless": "{{user `headless`}}",
       "shutdown_command": "shutdown -s -t 0",
-      "source_path": "/Win2019_RAW/Win2019_RAW.vmtx",
+      "source_path": "/win2019_RAW/win2019_RAW.vmtx",
 
       "vm_name": "{{user `vmname`}}",
       "display_name": "{{user `vmname`}}",
