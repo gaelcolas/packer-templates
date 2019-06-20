@@ -13,6 +13,9 @@
       "skip_export": "{{user `skip_export`}}",
       "keep_registered": true,
       "skip_compaction": false,
+      "floppy_dirs": [
+        "./DSC_Configuration"
+      ],
       "floppy_files": [
         "{{user `autounattend`}}",
         "./scripts/unattend.xml",

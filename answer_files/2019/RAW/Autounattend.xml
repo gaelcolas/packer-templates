@@ -113,6 +113,11 @@
                     <Description>Disable WinRM</Description>
                     <Path>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -File a:\disable-winrm.ps1</Path>
                 </RunSynchronousCommand>
+                <RunSynchronousCommand wcm:action="add">
+                    <Order>4</Order>
+                    <Description>Copy DSC Config</Description>
+                    <Path>cmd.exe /c C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -Command "Copy-Item -recurse 'a:\' 'C:\config' -force"</Path>
+                </RunSynchronousCommand>
             </RunSynchronous>
         </component>
     </settings>

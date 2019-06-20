@@ -5,7 +5,7 @@
 Configuration "Chocolatey_Config" {
 
     Import-DscResource -ModuleName Chocolatey -ModuleVersion 0.0.69
-    Node $ConfigurationData.AllNodes.Nodename {
+    Node $ConfigurationData.AllNodes.NodeName {
 
         ChocolateySoftware InstallChoco {
             Ensure = 'Present'
@@ -27,6 +27,7 @@ Configuration "Chocolatey_Config" {
             Ensure = 'Present'
             Name   = 'ConEmu'
         }
+
     }
 }
 

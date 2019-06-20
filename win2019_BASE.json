@@ -13,9 +13,11 @@
       "skip_export": true,
       "keep_registered": true,
       "skip_compaction": true,
-      "floppy_files": [
+      "floppy_dirs": [
         "./DSC_Configuration"
-        "{{user `autounattend`}}",
+      ],
+      "floppy_files": [
+
         "./scripts/disable-winrm.ps1",
         "./scripts/enable-winrm.ps1",
         "./scripts/unattend.xml",
@@ -46,6 +48,10 @@
     }
   ],
   "provisioners": [
+    {
+      "inline":". C:\\config\\DSC_Configuration\\RUN_DSC.ps1",
+      "type": "powershell"
+    },
     {
       "restart_timeout": "{{user `restart_timeout`}}",
       "type": "windows-restart"
